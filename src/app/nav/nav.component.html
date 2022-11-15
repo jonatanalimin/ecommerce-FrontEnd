@@ -6,36 +6,26 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarCollapse">
       <ul class="navbar-nav me-auto mb-2 mb-md-0">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Register</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Add Product</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Manage Category</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Manage User</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Biodata</a>
+        <li class="nav-item" *ngFor="let nav of navigation_left">
+          <a class="nav-link" [routerLink]="[nav.routerLink]" routerLinkActive="my-active-link" [routerLinkActiveOptions]="{exact:
+            true}">{{nav.menu}}</a>
         </li>
       </ul>
       <form class="d-flex" role="search">
         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
         <button class="btn btn-outline-success" type="submit">Search</button>
       </form>
-      <button style="margin-left:10px;" class="btn btn-outline-danger" type="submit">
-        <a class="nav-link" href="#">Log In</a>
+      <button *ngIf="!isLoggedIn" style="margin-left:10px;" class="btn btn-outline-danger" type="submit">
+        <a class="nav-link" [routerLink]="['/login']" routerLinkActive="my-right-active-link" [routerLinkActiveOptions]="{exact:
+          true}">Log In</a>
       </button>
-      <button style="margin-left:10px;" class="btn btn-outline-danger" type="submit">
-        <a class="nav-link" href="#">Log Out</a>
+      <button *ngIf="isLoggedIn" style="margin-left:10px;" class="btn btn-outline-danger" type="submit">
+        <a class="nav-link" (click)="logout()">Log Out</a>
       </button>
-      
+      <button *ngIf="!isLoggedIn" style="margin-left:10px;" class="btn btn-outline-danger" type="submit">
+        <a class="nav-link" [routerLink]="['/register']" routerLinkActive="my-right-active-link" [routerLinkActiveOptions]="{exact:
+          true}">Register</a>
+      </button>
     </div>
   </div>
 </nav>

@@ -48,3 +48,13 @@
     white-space: nowrap;
     -webkit-overflow-scrolling: touch;
   }
+
+  .my-active-link{
+    border: solid;
+    border-color: white;
+    color: white;
+  }
+
+  .my-right-active-link{
+    fill: white;
+  }

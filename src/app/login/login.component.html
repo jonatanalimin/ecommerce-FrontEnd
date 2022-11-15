@@ -1,5 +1,5 @@
 <div class="d-flex justify-content-center text-center" >
-  <form class="p-3 mt-3" [formGroup]="loginForm" (ngSubmit)="onSubmit()" style="width: 50%;">
+  <form *ngIf="!isLoggedIn" class="p-3 mt-3" [formGroup]="loginForm" (ngSubmit)="onSubmit()" style="width: 50%;">
     <h1 class="h3 mb-5 fw-normal">Please sign in</h1>
 
     <div class="alert alert-danger" role="alert" *ngIf="errorMessage">
@@ -16,4 +16,7 @@
     </div>
     <button class="w-100 btn btn-lg btn-primary" type="submit" [disabled]="!loginForm.valid">Sign in</button>
   </form>
+  <div class="alert alert-success" *ngIf="isLoggedIn">
+    Welcome {{username_}} as {{ role }}.
+  </div>
 </div>

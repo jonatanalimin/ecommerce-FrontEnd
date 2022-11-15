@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../service/user.service';
 import { FormBuilder, Validator, Validators } from '@angular/forms';
+import { StorageService } from '../service/storage.service';
 
 @Component({
   selector: 'app-login',
@@ -8,8 +9,11 @@ import { FormBuilder, Validator, Validators } from '@angular/forms';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-
-  errorMessage: string='';
+  isLoggedIn = false;
+  isLoginFailed = false;
+  username_: string = '';
+  role: string = '';
+  errorMessage: string ='';
 
   loginForm = this.fb.group({
     username: ['', Validators.required],
@@ -18,10 +22,15 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private userService: UserService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private storageService: StorageService
   ) { }
 
   ngOnInit(): void {
+    if(this.storageService.isLoggedIn()){
+      this.isLoggedIn = true;
+      this.role = this.storageService.getUser().role;
+    }
   }
 
   onSubmit(): void{
@@ -41,10 +50,19 @@ export class LoginComponent implements OnInit {
       .subscribe({
         next: (response) => {
           console.log(response);
+          this.storageService.saveUser(response);
+
+          this.isLoginFailed = false;
+          this.isLoggedIn = true;
+          console.log(this.storageService.getUser());
+          this.username_ = this.storageService.getUser().username;
+          this.role = this.storageService.getUser().role;
+          window.location.reload();
         },
         error:(err) => {
           this.errorMessage = err.error.errorMessage;
           this.loginForm.reset();
+          this.isLoginFailed = true;
         }
       })
     } 
