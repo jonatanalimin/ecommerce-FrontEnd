@@ -29,7 +29,7 @@ export class NavComponent implements OnInit {
       roles: ['ROLE_ADMIN']
     }, {
       menu: 'Manage User',
-      routerLink: '',
+      routerLink: 'user-management',
       roles: ['ROLE_ADMIN']
     }, {
       menu: 'Biodata',

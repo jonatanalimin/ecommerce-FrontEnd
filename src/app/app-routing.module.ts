@@ -5,6 +5,7 @@ import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
 import { RegisterComponent } from './register/register.component';
+import { UserManagementComponent } from './user-management/user-management.component';
 // import { CommonModule } from '@angular/common';
 
 
@@ -13,7 +14,8 @@ const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
   {path: 'add-product', component: AddProductComponent},
-  {path: 'product-details/:id', component: ProductDetailComponent}
+  {path: 'product-details/:id', component: ProductDetailComponent},
+  {path: 'user-management', component: UserManagementComponent}
   // {path: '', redirectTo: '/dashboard', pathMatch: 'full'},
   // {path: 'dashboard', component: DashboardComponent},
   // {path: 'error', component: ErrorpageComponent},

@@ -12,6 +12,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FooterComponent } from './footer/footer.component';
 import { AddProductComponent } from './add-product/add-product.component';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
+import { UserManagementComponent } from './user-management/user-management.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { ProductDetailComponent } from './product-detail/product-detail.componen
     RegisterComponent,
     FooterComponent,
     AddProductComponent,
-    ProductDetailComponent
+    ProductDetailComponent,
+    UserManagementComponent
   ],
   imports: [
     BrowserModule,
