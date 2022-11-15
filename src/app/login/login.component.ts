@@ -30,6 +30,7 @@ export class LoginComponent implements OnInit {
     if(this.storageService.isLoggedIn()){
       this.isLoggedIn = true;
       this.role = this.storageService.getUser().role;
+      this.username_ = this.storageService.getUser().username;
     }
   }
 
