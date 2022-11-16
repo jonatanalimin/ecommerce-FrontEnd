@@ -1,0 +1,35 @@
+<div class="d-flex justify-content-center text-center" >
+    <form class="p-3 mt-3" [formGroup]="addProductForm" (ngSubmit)="onSubmit()" style="width: 50%;">
+        <h1 class="h3 mb-5 fw-normal">Add Product</h1>
+    
+        <div class="alert alert-danger" role="alert" *ngIf="errorMessage">
+            {{errorMessage}}
+        </div>
+    
+        <div class="form-floating">
+            <input type="text" class="form-control mb-2" id="floatingInput" placeholder="name" formControlName="name">
+            <label for="floatingInput">Name</label>
+        </div>
+        <div class="form-floating">
+            <input type="text" class="form-control mb-2" id="floatingInput" placeholder="price" formControlName="price">
+            <label for="floatingInput">Price</label>
+        </div>
+        <div class="form-floating">
+            <input type="text" class="form-control mb-2" id="floatingInput" placeholder="image" formControlName="image">
+            <label for="floatingInput">Image</label>
+        </div>
+        <div class="form-floating">
+            <input type="text" class="form-control mb-2" id="floatingInput" placeholder="description" formControlName="description">
+            <label for="floatingInput">Description</label>
+        </div>
+        <div class="form-floating">
+            <input type="text" class="form-control mb-2" id="floatingInput" placeholder="category" formControlName="category">
+            <label for="floatingInput">Category</label>
+        </div>
+        <button class="w-100 btn btn-lg btn-primary" type="submit" [disabled]="!addProductForm.valid">Submit</button>
+    </form>
+    <!-- <div class="alert alert-success" *ngIf="addProductForm">
+      Welcome {{username_}} as {{ role }}.
+    </div> -->
+  </div>
+  

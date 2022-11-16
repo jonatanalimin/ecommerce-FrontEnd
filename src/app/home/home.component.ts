@@ -24,8 +24,6 @@ export class HomeComponent implements OnInit {
   }
 
   getProducts(): void {
-    // this.listHero = this.heroService.getHeroes();
-    console.log("asd");
     this.productService.getProducts()
     .subscribe(observable => this.listProduct = observable);
   }
