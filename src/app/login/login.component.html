@@ -16,7 +16,55 @@
     </div>
     <button class="w-100 btn btn-lg btn-primary" type="submit" [disabled]="!loginForm.valid">Sign in</button>
   </form>
-  <div class="alert alert-success" *ngIf="isLoggedIn">
-    Welcome {{username_}} as {{ role }}.
-  </div>
 </div>
+
+<ng-template #edit let-c="close" let-d="dismiss">
+  <div class="modal-header">    
+      <h4 class="modal-title" id="modal-basic-title">Change Expired Password</h4>    
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">    
+          <span aria-hidden="true">×</span>    
+      </button>    
+  </div>   
+  <div class="modal-body">
+    <form class="p-3 mt-3 mx-auto" [formGroup]="chgPassForm" (ngSubmit)="onChange()" style="width: 85%;">
+      <div class="alert alert-danger text-center" role="alert" *ngIf="errorMessage">
+        {{errorMessage}}
+      </div>
+      <div class="alert alert-danger text-center" role="alert" *ngIf="confirmPassword.errors?.['confirmedValidator']">
+        New password did not match!
+      </div>
+  
+      <div class="form-floating">
+          <input type="password" class="form-control mb-2" id="oldPass" placeholder="Old Password" formControlName="oldPassword">
+          <label for="oldPass">Old Password</label>
+      </div>
+      <div class="form-floating">
+        <input type="password" class="form-control mb-2" id="newPass" placeholder="New Password" formControlName="newPassword">
+        <label for="newPass">New Password</label>
+      </div>
+      <div class="form-floating">
+        <input type="password" class="form-control mb-2" id="confPass" placeholder="Confirm New Password" formControlName="confirmPassword">
+        <label for="confPass">Confirm Password</label>
+      </div>
+      <button class="w-100 btn btn-lg btn-primary" type="submit" [disabled]="!chgPassForm.valid">Change</button>
+    </form>
+  </div>
+  <div class="modal-footer">    
+      <button type="button" class="btn btn-outline-dark" (click)="d('Cross click')">Cancel</button>       
+  </div>   
+</ng-template>
+
+<ng-template #editInfo let-c="close" let-d="dismiss">    
+  <div class="modal-header">    
+      <h4 class="modal-title" id="modal-basic-title">{{title}}</h4>    
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">    
+          <span aria-hidden="true">×</span>    
+      </button>    
+  </div>    
+  <div class="modal-body">    
+      <p>{{body}}</p>  
+  </div>    
+  <div class="modal-footer"> 
+      <button type="button" class="btn btn-outline-dark" (click)="c('ok')">Ok</button>    
+  </div>    
+</ng-template> 

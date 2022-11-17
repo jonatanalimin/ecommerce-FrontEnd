@@ -13,8 +13,6 @@ import { FooterComponent } from './footer/footer.component';
 import { AddProductComponent } from './add-product/add-product.component';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
 import { UserManagementComponent } from './user-management/user-management.component';
-import { UserManagementEditComponent } from './user-management-edit/user-management-edit.component';
-import { ChangeExpiredPasswordComponent } from './change-expired-password/change-expired-password.component';
 import { BiodataComponent } from './biodata/biodata.component';
 
 @NgModule({
@@ -28,8 +26,6 @@ import { BiodataComponent } from './biodata/biodata.component';
     AddProductComponent,
     ProductDetailComponent,
     UserManagementComponent,
-    UserManagementEditComponent,
-    ChangeExpiredPasswordComponent,
     BiodataComponent
   ],
   imports: [

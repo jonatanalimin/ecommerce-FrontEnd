@@ -67,6 +67,17 @@ export class UserService {
     return this.http.put<string>(`${this.baseUrl}/users/changeExpPassword`, null, {params: params_})
   }
 
+  chgPass(id:number, newPassword:string, oldPassword:string): Observable<LoginResp>{
+    let params_ = new HttpParams({
+      fromObject: {
+        id: id,
+        oldPassword: oldPassword,
+        newPassword: newPassword
+      }
+    });
+    return this.http.put<LoginResp>(`${this.baseUrl}/users/changePassword`, null, {params: params_})
+  }
+
   delete(auth: string, id:number): Observable<void>{
     const httpOptions = {
       headers: new HttpHeaders({

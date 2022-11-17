@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { UserService } from '../service/user.service';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, AbstractControl, AbstractControlOptions, FormControl, FormGroup } from '@angular/forms';
 import { StorageService } from '../service/storage.service';
 import { Router } from '@angular/router';
-import { Buffer } from 'buffer';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
 
 @Component({
   selector: 'app-login',
@@ -22,7 +23,32 @@ export class LoginComponent implements OnInit {
     password: ['', Validators.required],
   });
 
+  oldPassword = new FormControl(null, [
+    (c: AbstractControl) => Validators.required(c),
+  ]);
+  newPassword = new FormControl(null, [
+    (c: AbstractControl) => Validators.required(c),
+  ]);
+  confirmPassword = new FormControl(null, [
+    (c: AbstractControl) => Validators.required(c),
+  ]);
+  chgPassForm = this.fb.group({
+    oldPassword: this.oldPassword,
+    newPassword: this.newPassword,
+    confirmPassword: this.confirmPassword
+  },
+  {
+    validator: this.ConfirmedValidator('newPassword', 'confirmPassword'),
+  } as AbstractControlOptions);
+  id_:number = 0;
+  title:string ="";
+  body:string ="";
+  editBox:any;
+  @ViewChild('edit') editModal: ElementRef | undefined;
+  @ViewChild('editInfo') infoModal: ElementRef | undefined;
+
   constructor(
+    private modalService:NgbModal,
     private router: Router,
     private userService: UserService,
     private fb: FormBuilder,
@@ -33,6 +59,24 @@ export class LoginComponent implements OnInit {
     if(this.storageService.isLoggedIn()){
       this.router.navigate(['']);
     }
+  }
+
+  ConfirmedValidator(controlName: string, matchingControlName: string) {
+    return (formGroup: FormGroup) => {
+      const control = formGroup.controls[controlName];
+      const matchingControl = formGroup.controls[matchingControlName];
+      if (
+        matchingControl.errors &&
+        !matchingControl.errors['confirmedValidator']
+      ) {
+        return;
+      }
+      if (control.value !== matchingControl.value) {
+        matchingControl.setErrors({ confirmedValidator: true });
+      } else {
+        matchingControl.setErrors(null);
+      }
+    };
   }
 
   onSubmit(): void{
@@ -59,11 +103,15 @@ export class LoginComponent implements OnInit {
           console.log(this.storageService.getUser());
           this.username_ = this.storageService.getUser().username;
           this.role = this.storageService.getUser().role;
-          window.location.replace('http://localhost:4200');
+          this.title = 'Login Success';
+            this.body = 'You are logged as ' + this.username_;
+            this.modalService.open(this.infoModal, { ariaLabelledBy: 'modal-basic-title' }).result.then(
+              () => {window.location.replace('http://localhost:4200');}, () => {window.location.replace('http://localhost:4200');}
+            );
         },
         error:(err) => {
           if(err.status === 426){
-            this.router.navigate(['change-expired-password', {'id': Buffer.from((err.error.id).toString()).toString('base64')}]);
+            this.openEditBox(err.error.id);
           }
           if(typeof(err.error.error) === 'object'){
             this.errorMessage = err.error.error.message;
@@ -77,4 +125,43 @@ export class LoginComponent implements OnInit {
     } 
   }
 
+  openEditBox(id:number):void{
+    this.id_ = id;
+    this.chgPassForm.reset();
+    this.editBox = this.modalService.open(this.editModal, { ariaLabelledBy: 'modal-basic-title' });
+  }
+
+  onChange():void{
+    if(typeof(this.chgPassForm.value.oldPassword)==='string' && typeof(this.chgPassForm.value.newPassword)==='string' && typeof(this.chgPassForm.value.confirmPassword)==='string'){
+      this.userService.chgExpiryPass(this.id_, this.chgPassForm.value.newPassword, this.chgPassForm.value.oldPassword)
+        .subscribe({
+          next: (resp) => {
+            this.editBox.close();
+            this.errorMessage = '';
+            this.title = 'Password Changed!';
+            this.body = 'Your password has been changed! Please re-login!';
+            this.modalService.open(this.infoModal, { ariaLabelledBy: 'modal-basic-title' }).result.then(
+              () => {}, () => {}
+            );
+          },
+          error: (err) => {
+            console.log(err);
+            if(err.status === 423){
+              this.editBox.close();
+              this.errorMessage = '';
+              this.title = 'Your Account Locked!';
+              this.body = 'Your account has been locked due to 3 failed attempts. It will be unlocked after 24 hours!';
+              this.modalService.open(this.infoModal, { ariaLabelledBy: 'modal-basic-title' });
+            }else{
+              if(typeof(err.error.error) === 'object'){
+                this.errorMessage = err.error.error.message;
+              }else{
+                this.errorMessage = err.error.error;
+              }
+            }
+            this.chgPassForm.reset();
+          }
+        })
+    }
+  }
 }
