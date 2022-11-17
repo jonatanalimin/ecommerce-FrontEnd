@@ -1,10 +1,10 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
 import { UserManagementGetAllResp } from '../model/user';
 import { StorageService } from '../service/storage.service';
 import { UserService } from '../service/user.service';
 import { FormControl,AbstractControl, FormBuilder, FormGroup, AbstractControlOptions, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { SpinnerService } from '../service/spinner.service';
 
 @Component({
   selector: 'app-biodata',
@@ -13,7 +13,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 })
 export class BiodataComponent implements OnInit {
   empty: boolean = false;
-
+  processing = false;
   user: UserManagementGetAllResp = {
     id:0,
     username: '',
@@ -51,7 +51,7 @@ export class BiodataComponent implements OnInit {
   @ViewChild('contentInfo') infoModal: ElementRef | undefined;
 
   constructor(
-    private router: Router,
+    private spinnerService: SpinnerService,
     private modalService: NgbModal,
     private fb: FormBuilder,
     private storageService : StorageService,
@@ -59,14 +59,18 @@ export class BiodataComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log(this.storageService.getUser().id);
+    this.spinnerService.requestStarted();
     this.userService.getById(this.storageService.getUser().auth, this.storageService.getUser().id)
       .subscribe({
         next: (resp) => {
+          this.spinnerService.requestEnded();
           this.empty = false;
           this.user = resp;
         },
-        error: (err) => console.error(err)
+        error: (err) => {
+          this.empty = true;
+          this.spinnerService.resetSpinner();
+        }
       })
   }
 
@@ -95,9 +99,13 @@ export class BiodataComponent implements OnInit {
 
   onSubmit():void{
     if(typeof(this.chgPassForm.value.oldPassword)==='string' && typeof(this.chgPassForm.value.newPassword)==='string' && typeof(this.chgPassForm.value.confirmPassword)==='string'){
+      this.processing=true;
+      this.chgPassForm.disable();
       this.userService.chgPass(this.storageService.getUser().id, this.chgPassForm.value.newPassword, this.chgPassForm.value.oldPassword)
         .subscribe({
           next: (resp) => {
+            this.processing=false;
+            this.chgPassForm.enable();
             this.chgBox.close();
             this.storageService.saveUser(resp);
             this.title = 'Password Changed!';
@@ -111,6 +119,8 @@ export class BiodataComponent implements OnInit {
             );
           },
           error: (err) => {
+            this.processing=false;
+            this.chgPassForm.enable();
             if(err.status === 423){
               this.chgBox.close();
               this.title = 'Your Account Locked!';
@@ -124,12 +134,10 @@ export class BiodataComponent implements OnInit {
                   window.location.replace('http://localhost:4200/login');
                 }
               );
-            }else{
-              if(typeof(err.error.error) === 'object'){
-                this.errorMessage = err.error.error.message;
-              }else{
-                this.errorMessage = err.error.error;
-              }
+            }else if(err.status === 0){
+              this.errorMessage = err.statusText;
+            } else {
+              this.errorMessage = err.error.error;
             }
             this.chgPassForm.reset();
           }

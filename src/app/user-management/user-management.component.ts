@@ -4,6 +4,8 @@ import { UserManagementGetAllResp } from '../model/user';
 import { StorageService } from '../service/storage.service';
 import { UserService } from '../service/user.service';
 import { FormBuilder, Validators } from '@angular/forms';
+import { SpinnerComponent } from '../spinner/spinner.component';
+import { SpinnerService } from '../service/spinner.service';
 
 @Component({
   selector: 'app-user-management',
@@ -11,6 +13,7 @@ import { FormBuilder, Validators } from '@angular/forms';
   styleUrls: ['./user-management.component.css']
 })
 export class UserManagementComponent implements OnInit {
+  processing = false;
   user_modal?: UserManagementGetAllResp;
   user_: UserManagementGetAllResp = {
     id:0,
@@ -39,6 +42,7 @@ export class UserManagementComponent implements OnInit {
   @ViewChild('contentDel') mymodal: ElementRef | undefined;
 
   constructor(
+    private spinnerService: SpinnerService,
     private fb: FormBuilder,
     private userService: UserService,
     private storageService: StorageService,
@@ -47,9 +51,11 @@ export class UserManagementComponent implements OnInit {
 
   ngOnInit(): void {
     const username_ = this.storageService.getUser().username;
+    this.spinnerService.requestStarted();
     this.userService.getAll(this.storageService.getUser().auth)
       .subscribe({
         next: (resp) => {
+          this.spinnerService.requestEnded();
           console.log(resp);
           resp.forEach(element => {
             if(element.username !== username_){
@@ -57,7 +63,10 @@ export class UserManagementComponent implements OnInit {
             }
           });
         },
-        error:(err) => (console.error(err))
+        error:(err) => {
+          this.users = [];
+          this.spinnerService.resetSpinner();
+        }
       })
   }
 
@@ -73,6 +82,8 @@ export class UserManagementComponent implements OnInit {
 
   onSubmit(): void{
     if(typeof(this.editForm.value.role) === 'string' && typeof(this.editForm.value.enabled) === 'boolean' && typeof(this.editForm.value.locked) === 'boolean'){
+      this.processing=true;
+      this.editForm.disable();
       this.user_.role = this.editForm.value.role;
       this.user_.enabled = this.editForm.value.enabled;
       this.user_.locked = this.editForm.value.locked;
@@ -80,6 +91,8 @@ export class UserManagementComponent implements OnInit {
       this.userService.update(this.storageService.getUser().auth, this.user_)
           .subscribe({
             next: (resp) => {
+              this.processing=false;
+              this.editForm.enable();
               console.log(resp);
               this.editBox.close();
               this.title = "Succes Edit Data";
@@ -88,6 +101,8 @@ export class UserManagementComponent implements OnInit {
               this.modalService.open(this.infoModal, { ariaLabelledBy: 'modal-basic-title' });
             },
             error: (err) => {
+              this.processing=false;
+              this.editForm.enable();
               this.editBox.close();
               this.title = "Failed Edit Data";
               this.body = err.message;

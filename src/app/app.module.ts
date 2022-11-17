@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { NavComponent } from './nav/nav.component';
@@ -14,6 +13,7 @@ import { AddProductComponent } from './add-product/add-product.component';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
 import { UserManagementComponent } from './user-management/user-management.component';
 import { BiodataComponent } from './biodata/biodata.component';
+import { SpinnerComponent } from './spinner/spinner.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +26,8 @@ import { BiodataComponent } from './biodata/biodata.component';
     AddProductComponent,
     ProductDetailComponent,
     UserManagementComponent,
-    BiodataComponent
+    BiodataComponent,
+    SpinnerComponent,
   ],
   imports: [
     BrowserModule,

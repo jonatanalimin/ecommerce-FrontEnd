@@ -12,6 +12,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
+  processing = false;
+  processing_edit = false;
   isLoggedIn = false;
   isLoginFailed = false;
   username_: string = '';
@@ -80,6 +82,9 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit(): void{
+    this.processing = true;
+    this.loginForm.get('username')?.disable();
+    this.loginForm.get('password')?.disable();
     this.login();
   }
 
@@ -95,6 +100,9 @@ export class LoginComponent implements OnInit {
       this.userService.login(username_val, password_val)
       .subscribe({
         next: (response) => {
+          this.processing = false;
+          this.loginForm.get('username')?.enable();
+          this.loginForm.get('password')?.enable();
           console.log(response);
           this.storageService.saveUser(response);
 
@@ -110,32 +118,40 @@ export class LoginComponent implements OnInit {
             );
         },
         error:(err) => {
+          this.processing = false;
+          this.loginForm.get('username')?.enable();
+          this.loginForm.get('password')?.enable();
           if(err.status === 426){
+            this.errorMessage = err.error.error;
             this.openEditBox(err.error.id);
-          }
-          if(typeof(err.error.error) === 'object'){
-            this.errorMessage = err.error.error.message;
-          }else{
+          } else if(err.status === 0){
+            this.errorMessage = err.message;
+          } else {
             this.errorMessage = err.error.error;
           }
           this.loginForm.reset();
           this.isLoginFailed = true;
         }
       })
-    } 
+    }
   }
 
   openEditBox(id:number):void{
     this.id_ = id;
     this.chgPassForm.reset();
-    this.editBox = this.modalService.open(this.editModal, { ariaLabelledBy: 'modal-basic-title' });
+    this.editBox = this.modalService.open(this.editModal, { ariaLabelledBy: 'modal-basic-title' }).result.then(
+      () => { this.errorMessage = '';}, () => { this.errorMessage = '';});
   }
 
   onChange():void{
     if(typeof(this.chgPassForm.value.oldPassword)==='string' && typeof(this.chgPassForm.value.newPassword)==='string' && typeof(this.chgPassForm.value.confirmPassword)==='string'){
+      this.processing_edit = true;
+      this.chgPassForm.disable();
       this.userService.chgExpiryPass(this.id_, this.chgPassForm.value.newPassword, this.chgPassForm.value.oldPassword)
         .subscribe({
           next: (resp) => {
+            this.processing_edit = false;
+            this.chgPassForm.enable();
             this.editBox.close();
             this.errorMessage = '';
             this.title = 'Password Changed!';
@@ -145,19 +161,18 @@ export class LoginComponent implements OnInit {
             );
           },
           error: (err) => {
-            console.log(err);
+            this.processing_edit = false;
+            this.chgPassForm.enable();
             if(err.status === 423){
               this.editBox.close();
               this.errorMessage = '';
               this.title = 'Your Account Locked!';
               this.body = 'Your account has been locked due to 3 failed attempts. It will be unlocked after 24 hours!';
               this.modalService.open(this.infoModal, { ariaLabelledBy: 'modal-basic-title' });
-            }else{
-              if(typeof(err.error.error) === 'object'){
-                this.errorMessage = err.error.error.message;
-              }else{
-                this.errorMessage = err.error.error;
-              }
+            }else if(err.status === 0){
+              this.errorMessage = err.statusText;
+            } else {
+              this.errorMessage = err.error.error;
             }
             this.chgPassForm.reset();
           }

@@ -1,5 +1,5 @@
 <div class="mt-lg-5 mb-lg-5 mx-lg-5">
-    <table class="table table-striped">
+    <table *ngIf="users.length > 0;else noUsers" class="table table-striped">
         <thead>
             <tr class="text-center">
               <th scope="col">Id</th>
@@ -69,6 +69,9 @@
             </tr>
           </tbody>
     </table>
+    <ng-template #noUsers class="container">
+        <h4 class="text-muted text-center">No Data</h4>
+    </ng-template>
 </div>
 
 <ng-template #edit let-c="close" let-d="dismiss">
@@ -114,7 +117,12 @@
                 </div>
             </fieldset>
             <div class="container text-center">
-                <button type="submit" class="btn btn-primary" [disabled]="!editForm.valid">Save</button>
+                <button *ngIf="!processing;else spin" type="submit" class="btn btn-primary" [disabled]="!editForm.valid">Save</button>
+                <ng-template #spin>
+                    <div class="spinner-border text-primary" role="status" style="margin: auto; left: 0;right: 0;">
+                      <span class="visually-hidden">Loading...</span>
+                    </div>
+                  </ng-template>
             </div>
         </form>
     </div>

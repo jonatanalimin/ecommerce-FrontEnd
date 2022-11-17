@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { UserService } from '../service/user.service';
 import { FormBuilder, Validators, FormGroup, FormControl, AbstractControl, AbstractControlOptions } from '@angular/forms';
 import { StorageService } from '../service/storage.service';
+import { Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-register',
@@ -25,8 +27,14 @@ export class RegisterComponent implements OnInit {
   }, {
     validator: this.ConfirmedValidator('password', 'confirm_password'),
   } as AbstractControlOptions);
+  title:string = '';
+  body:string = '';
+  processing = false;
+  @ViewChild('editInfo') infoModal: ElementRef | undefined;
 
   constructor(
+    private modalService: NgbModal,
+    private router: Router,
     private userService: UserService,
     private fb: FormBuilder,
     private storageService: StorageService
@@ -37,6 +45,7 @@ export class RegisterComponent implements OnInit {
       this.isLoggedIn = true;
       this.role = this.storageService.getUser().role;
       this.username_ = this.storageService.getUser().username;
+      this.router.navigate(['']);
     }
   }
 
@@ -63,12 +72,16 @@ export class RegisterComponent implements OnInit {
   }
 
   register(): void{
+    this.processing = true;
+    this.registerForm.disable();
     this.errorMessage = '';
     let username_val: string;
     let password_val: string;
     console.log(this.registerForm.value.password);
 
     if(this.registerForm.value.password !== this.registerForm.value.confirm_password){
+      this.processing = false;
+      this.registerForm.enable();
       this.errorMessage = "Confirm password must be same with password!";
       this.registerForm.reset();
       this.isLoginFailed = true;
@@ -80,7 +93,8 @@ export class RegisterComponent implements OnInit {
         this.userService.register(username_val, password_val)
         .subscribe({
           next: (response) => {
-            console.log(response);
+            this.processing = false;
+            this.registerForm.enable();
             this.storageService.saveUser(response);
   
             this.isLoginFailed = false;
@@ -88,12 +102,18 @@ export class RegisterComponent implements OnInit {
             console.log(this.storageService.getUser());
             this.username_ = this.storageService.getUser().username;
             this.role = this.storageService.getUser().role;
-            window.location.reload();
+            this.title="Register Success";
+            this.body="Welcome " + this.username_ + " to eCommerce!"
+            this.modalService.open(this.infoModal, { ariaLabelledBy: 'modal-basic-title' }).result.then(
+              () => window.location.replace("http://localhost:4200/"), () => window.location.replace("http://localhost:4200/")
+            );
           },
           error:(err) => {
-            if(typeof(err.error.error) === 'object'){
-              this.errorMessage = err.error.error.message;
-            }else{
+            this.processing = false;
+            this.registerForm.enable();
+            if(err.status === 0){
+              this.errorMessage = err.message;
+            } else {
               this.errorMessage = err.error.error;
             }
             this.registerForm.reset();

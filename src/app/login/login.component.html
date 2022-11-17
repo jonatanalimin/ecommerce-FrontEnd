@@ -14,7 +14,12 @@
       <input type="password" class="form-control mb-2" id="floatingPassword" placeholder="Password" formControlName="password">
       <label for="floatingPassword">Password</label>
     </div>
-    <button class="w-100 btn btn-lg btn-primary" type="submit" [disabled]="!loginForm.valid">Sign in</button>
+    <button *ngIf="!processing;else spin" class="w-100 btn btn-lg btn-primary" type="submit" [disabled]="!loginForm.valid">Sign in</button>
+    <ng-template #spin>
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </ng-template>
   </form>
 </div>
 
@@ -46,7 +51,12 @@
         <input type="password" class="form-control mb-2" id="confPass" placeholder="Confirm New Password" formControlName="confirmPassword">
         <label for="confPass">Confirm Password</label>
       </div>
-      <button class="w-100 btn btn-lg btn-primary" type="submit" [disabled]="!chgPassForm.valid">Change</button>
+      <button *ngIf="!processing_edit;else spinEdit" class="w-100 btn btn-lg btn-primary" type="submit" [disabled]="!chgPassForm.valid">Change</button>
+      <ng-template #spinEdit>
+        <div class="spinner-border text-primary" role="status" style="position: absolute;margin: auto; left: 0;right: 0;">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </ng-template>
     </form>
   </div>
   <div class="modal-footer">    

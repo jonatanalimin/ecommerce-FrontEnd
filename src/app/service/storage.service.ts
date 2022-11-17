@@ -25,6 +25,26 @@ export class StorageService {
     return {};
   }
 
+  public isAdmin(): boolean {
+    const user = this.getUser();
+    if (user) {
+      if(user.role === 'ROLE_ADMIN'){
+        return true
+      }
+    }
+    return false;
+  }
+
+  public isUserAdmin(): boolean {
+    const user = this.getUser();
+    if (user) {
+      if(user.role === 'ROLE_ADMIN' || user.role === 'ROLE_USER'){
+        return true
+      }
+    }
+    return false;
+  }
+
   public isLoggedIn(): boolean {
     const user = window.localStorage.getItem(USER_KEY);
     if (user) {
