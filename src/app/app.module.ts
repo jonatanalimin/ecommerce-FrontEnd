@@ -15,6 +15,7 @@ import { ProductDetailComponent } from './product-detail/product-detail.componen
 import { UserManagementComponent } from './user-management/user-management.component';
 import { UserManagementEditComponent } from './user-management-edit/user-management-edit.component';
 import { ChangeExpiredPasswordComponent } from './change-expired-password/change-expired-password.component';
+import { BiodataComponent } from './biodata/biodata.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { ChangeExpiredPasswordComponent } from './change-expired-password/change
     ProductDetailComponent,
     UserManagementComponent,
     UserManagementEditComponent,
-    ChangeExpiredPasswordComponent
+    ChangeExpiredPasswordComponent,
+    BiodataComponent
   ],
   imports: [
     BrowserModule,

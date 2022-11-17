@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders} from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { LoginResp, UserManagementGetAllResp } from '../model/user';
 
@@ -54,6 +54,17 @@ export class UserService {
       })
     }
     return this.http.put<UserManagementGetAllResp>(`${this.baseUrl}/users`, user, httpOptions)
+  }
+
+  chgExpiryPass(id:number, newPassword:string, oldPassword:string): Observable<string>{
+    let params_ = new HttpParams({
+      fromObject: {
+        id: id,
+        oldPassword: oldPassword,
+        newPassword: newPassword
+      }
+    });
+    return this.http.put<string>(`${this.baseUrl}/users/changeExpPassword`, null, {params: params_})
   }
 
   delete(auth: string, id:number): Observable<void>{

@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../service/user.service';
-import { FormBuilder, Validator, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { StorageService } from '../service/storage.service';
 import { Router } from '@angular/router';
+import { Buffer } from 'buffer';
 
 @Component({
   selector: 'app-login',
@@ -58,14 +59,17 @@ export class LoginComponent implements OnInit {
           console.log(this.storageService.getUser());
           this.username_ = this.storageService.getUser().username;
           this.role = this.storageService.getUser().role;
-          window.location.reload();
-          this.router.navigate(['']);
+          window.location.replace('http://localhost:4200');
         },
         error:(err) => {
           if(err.status === 426){
-            this.router.navigate(['change-expired-password']);
+            this.router.navigate(['change-expired-password', {'id': Buffer.from((err.error.id).toString()).toString('base64')}]);
           }
-          this.errorMessage = err.error.errorMessage;
+          if(typeof(err.error.error) === 'object'){
+            this.errorMessage = err.error.error.message;
+          }else{
+            this.errorMessage = err.error.error;
+          }
           this.loginForm.reset();
           this.isLoginFailed = true;
         }

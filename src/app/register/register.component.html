@@ -5,6 +5,9 @@
       <div class="alert alert-danger" role="alert" *ngIf="errorMessage">
         {{errorMessage}}
       </div>
+      <div class="alert alert-danger" role="alert" *ngIf="confirmPassword.errors?.['confirmedValidator']">
+        New password did not match!
+      </div>
   
       <div class="form-floating">
           <input type="text" class="form-control mb-2" id="floatingInput" placeholder="username" formControlName="username">

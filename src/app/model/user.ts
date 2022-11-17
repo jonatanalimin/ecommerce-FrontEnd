@@ -20,7 +20,7 @@ export interface LoginResp {
     username:String,
     auth:String,
     role:String,
-    errorMessage:String
+    error:String
 }
 
 export class UserModel {

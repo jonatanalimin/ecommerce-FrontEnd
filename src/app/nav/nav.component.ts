@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { elementAt } from 'rxjs';
 import { Emitters } from '../emitter/emitter';
 import { Nav } from '../model/nav';
 import { StorageService } from '../service/storage.service';
 import { Router } from '@angular/router';
+import { EventBusService } from '../shared/event-bus.service';
 
 @Component({
   selector: 'app-nav',
@@ -34,7 +34,7 @@ export class NavComponent implements OnInit {
       roles: ['ROLE_ADMIN']
     }, {
       menu: 'Biodata',
-      routerLink: '',
+      routerLink: 'biodata',
       roles: ['ROLE_USER', 'ROLE_ADMIN']
     }
   ];
@@ -76,6 +76,7 @@ export class NavComponent implements OnInit {
     // this.http.post('', {}, {withCredentials: true})
     // .subscribe(() => this.authenticated = false);
     this.storageService.clean();
-    window.location.reload();
+    window.location.replace('http://localhost:4200');
+    
   }
 }

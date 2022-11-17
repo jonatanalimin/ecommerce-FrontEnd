@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../service/user.service';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup, FormControl, AbstractControl, AbstractControlOptions } from '@angular/forms';
 import { StorageService } from '../service/storage.service';
 
 @Component({
@@ -14,12 +14,17 @@ export class RegisterComponent implements OnInit {
   username_: string = '';
   role: string = '';
   errorMessage: string ='';
+  confirmPassword = new FormControl(null, [
+    (c: AbstractControl) => Validators.required(c),
+  ]);
 
   registerForm = this.fb.group({
     username: ['', Validators.required],
     password: ['', Validators.required],
-    confirm_password: ['', Validators.required]
-  });
+    confirm_password: this.confirmPassword
+  }, {
+    validator: this.ConfirmedValidator('password', 'confirm_password'),
+  } as AbstractControlOptions);
 
   constructor(
     private userService: UserService,
@@ -33,6 +38,24 @@ export class RegisterComponent implements OnInit {
       this.role = this.storageService.getUser().role;
       this.username_ = this.storageService.getUser().username;
     }
+  }
+
+  ConfirmedValidator(controlName: string, matchingControlName: string) {
+    return (formGroup: FormGroup) => {
+      const control = formGroup.controls[controlName];
+      const matchingControl = formGroup.controls[matchingControlName];
+      if (
+        matchingControl.errors &&
+        !matchingControl.errors['confirmedValidator']
+      ) {
+        return;
+      }
+      if (control.value !== matchingControl.value) {
+        matchingControl.setErrors({ confirmedValidator: true });
+      } else {
+        matchingControl.setErrors(null);
+      }
+    };
   }
 
   onSubmit(): void{
@@ -68,7 +91,11 @@ export class RegisterComponent implements OnInit {
             window.location.reload();
           },
           error:(err) => {
-            this.errorMessage = err.error.errorMessage;
+            if(typeof(err.error.error) === 'object'){
+              this.errorMessage = err.error.error.message;
+            }else{
+              this.errorMessage = err.error.error;
+            }
             this.registerForm.reset();
             this.isLoginFailed = true;
           }
