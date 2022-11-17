@@ -35,4 +35,34 @@ export class UserService {
     }
     return this.http.get<UserManagementGetAllResp[]>(`${this.baseUrl}/users`, httpOptions)
   }
+
+  getById(auth: string, id:number): Observable<UserManagementGetAllResp>{
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-type': 'application/json',
+        'Authorization': auth
+      })
+    }
+    return this.http.get<UserManagementGetAllResp>(`${this.baseUrl}/users/${id}`, httpOptions)
+  }
+
+  update(auth:string, user: UserManagementGetAllResp): Observable<UserManagementGetAllResp>{
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-type': 'application/json',
+        'Authorization': auth,
+      })
+    }
+    return this.http.put<UserManagementGetAllResp>(`${this.baseUrl}/users`, user, httpOptions)
+  }
+
+  delete(auth: string, id:number): Observable<void>{
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-type': 'application/json',
+        'Authorization': auth,
+      })
+    }
+    return this.http.delete<void>(`${this.baseUrl}/users/${id}`, httpOptions)
+  }
 }

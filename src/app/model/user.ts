@@ -6,7 +6,7 @@ export interface UserManagementGetAllResp{
     enabled: boolean,
     passwordChangedTime: Date,
     failedAttempt: number,
-    isLocked: boolean,
+    locked: boolean,
     lockTime: Date
 }
 

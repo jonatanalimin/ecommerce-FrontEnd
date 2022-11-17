@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from '../service/user.service';
 import { FormBuilder, Validator, Validators } from '@angular/forms';
 import { StorageService } from '../service/storage.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -21,6 +22,7 @@ export class LoginComponent implements OnInit {
   });
 
   constructor(
+    private router: Router,
     private userService: UserService,
     private fb: FormBuilder,
     private storageService: StorageService
@@ -28,9 +30,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     if(this.storageService.isLoggedIn()){
-      this.isLoggedIn = true;
-      this.role = this.storageService.getUser().role;
-      this.username_ = this.storageService.getUser().username;
+      this.router.navigate(['']);
     }
   }
 
@@ -59,8 +59,12 @@ export class LoginComponent implements OnInit {
           this.username_ = this.storageService.getUser().username;
           this.role = this.storageService.getUser().role;
           window.location.reload();
+          this.router.navigate(['']);
         },
         error:(err) => {
+          if(err.status === 426){
+            this.router.navigate(['change-expired-password']);
+          }
           this.errorMessage = err.error.errorMessage;
           this.loginForm.reset();
           this.isLoginFailed = true;

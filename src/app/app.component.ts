@@ -1,4 +1,8 @@
+import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { Nav } from './model/nav';
+import { StorageService } from './service/storage.service';
 
 @Component({
   selector: 'app-root',

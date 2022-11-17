@@ -4,6 +4,7 @@ import { elementAt } from 'rxjs';
 import { Emitters } from '../emitter/emitter';
 import { Nav } from '../model/nav';
 import { StorageService } from '../service/storage.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-nav',
@@ -46,6 +47,7 @@ export class NavComponent implements OnInit {
   private role?: string;
 
   constructor(
+    private router: Router,
     private http: HttpClient,
     private storageService: StorageService
     ) { }

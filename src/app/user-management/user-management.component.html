@@ -1,1 +1,103 @@
-<p>user-management works!</p>
+<div class="mt-lg-5 mb-lg-5 mx-lg-5">
+    <table class="table table-striped">
+        <thead>
+            <tr class="text-center">
+              <th scope="col">Id</th>
+              <th scope="col">Username</th>
+              <th scope="col">Role</th>
+              <th scope="col">Enabled</th>
+              <th scope="col">Locked</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of users" class="text-center">
+                <th class="align-middle" scope="row">{{user.id}}</th>
+                <td class="align-middle">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="blue" class="bi bi-person-circle" viewBox="0 0 16 16">
+                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+                    </svg>
+                    <span class="ms-lg-1">
+                        {{user.username | titlecase}}
+                    </span>
+                </td>
+                <td class="align-middle">{{user.role | titlecase}}</td>
+                <td class="align-middle">
+                    <span *ngIf="user.enabled; else disabled">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="green" class="bi bi-check-circle" viewBox="0 0 16 16">
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                            <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"/>
+                        </svg>
+                        <span class="ms-lg-1">Enabled</span>
+                    </span>
+                    <ng-template #disabled>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-dash-circle" viewBox="0 0 16 16">
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                            <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"/>
+                            </svg>
+                        <span class="ms-lg-1">Disabled</span>
+                    </ng-template>
+                </td>
+                <td class="align-middle">
+                    <span *ngIf="user.locked; else unlocked">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-lock-fill" viewBox="0 0 16 16">
+                            <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+                        </svg>
+                        <span class="ms-lg-1">Locked</span>
+                    </span>
+                    <ng-template #unlocked>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="green" class="bi bi-unlock-fill" viewBox="0 0 16 16">
+                            <path d="M11 1a2 2 0 0 0-2 2v4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h5V3a3 3 0 0 1 6 0v4a.5.5 0 0 1-1 0V3a2 2 0 0 0-2-2z"/>
+                        </svg>
+                        <span class="ms-lg-1">Unlocked</span>
+                    </ng-template>
+                </td>
+                <td class="align-middle">
+                    <button type="button" class="btn" routerLink="/user-management/edit/{{user.id}}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="blue" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                        </svg>
+                    </button>
+                    <button type="button" class="btn"  (click)="delete(content, user)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="red" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
+                        </svg>
+                    </button>
+                </td>
+            </tr>
+          </tbody>
+    </table>
+</div>
+
+<ng-template #content let-c="close" let-d="dismiss">    
+    <div class="modal-header">    
+        <h4 class="modal-title" id="modal-basic-title">Confirmation</h4>    
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">    
+            <span aria-hidden="true">×</span>    
+        </button>    
+    </div>    
+    <div class="modal-body">    
+        <p>Are you sure to delete {{username_selected}}?</p>    
+    </div>    
+    <div class="modal-footer">    
+        <button type="button" class="btn btn-outline-dark" (click)="d('Cross click')">Cancel</button>    
+        <button type="button" class="btn btn-outline-dark" (click)="c('yes')">Yes</button>    
+    </div>    
+</ng-template>
+
+<ng-template #contentDel let-c="close" let-d="dismiss">    
+    <div class="modal-header">    
+        <h4 class="modal-title" id="modal-basic-title">{{title}}</h4>    
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">    
+            <span aria-hidden="true">×</span>    
+        </button>    
+    </div>    
+    <div class="modal-body">    
+        <p>{{body}}</p>  
+    </div>    
+    <div class="modal-footer"> 
+        <button type="button" class="btn btn-outline-dark" (click)="c('ok')">Ok</button>    
+    </div>    
+</ng-template>

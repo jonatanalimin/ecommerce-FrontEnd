@@ -13,6 +13,8 @@ import { FooterComponent } from './footer/footer.component';
 import { AddProductComponent } from './add-product/add-product.component';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
 import { UserManagementComponent } from './user-management/user-management.component';
+import { UserManagementEditComponent } from './user-management-edit/user-management-edit.component';
+import { ChangeExpiredPasswordComponent } from './change-expired-password/change-expired-password.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,9 @@ import { UserManagementComponent } from './user-management/user-management.compo
     FooterComponent,
     AddProductComponent,
     ProductDetailComponent,
-    UserManagementComponent
+    UserManagementComponent,
+    UserManagementEditComponent,
+    ChangeExpiredPasswordComponent
   ],
   imports: [
     BrowserModule,
