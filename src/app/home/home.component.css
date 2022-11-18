@@ -68,3 +68,16 @@
     white-space: nowrap;
     -webkit-overflow-scrolling: touch;
   }
+  .image{
+    width: 100%;
+    height: 200px;
+    overflow-y: hidden;
+    display: flex;
+  }
+  .categorySearch{
+    float: right;
+    width: 20%;
+  }
+  .row{
+    clear: right;
+  }

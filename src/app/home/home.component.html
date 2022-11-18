@@ -1,9 +1,23 @@
 <div class="container">
-    
+    <br>
+    <form class="d-flex" role="search" [formGroup]="searchForm" (ngSubmit)="onSearch()">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" formControlName="search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+    </form>
+    <br>
+    <form class="categorySearch" role="search" [formGroup]="searchByCategoryForm">
+        Search by Category :
+        <select class="form-control" id="floatingInput" placeholder="category" formControlName="category" (change)="onSearchByCategory()">
+            <option value="">Select Category</option>
+            <option *ngFor="let category of listCategory" value="{{category.id}}">{{category.name}}</option>
+        </select>
+        <!-- <button class="btn btn-outline-success" type="submit">Search</button> -->
+    </form>
+    <br>
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-md-4 g-3">
         <div class="col" *ngFor="let product of listProduct">
             <div class="card shadow-sm">
-                <img src="{{product.image}}">
+                <img class="image" src="{{product.image}}">
                 <div class="card-body">
                     <h2 class="title">{{product.name | uppercase}}</h2>
                     <h2 class="price">{{product.price}}</h2>

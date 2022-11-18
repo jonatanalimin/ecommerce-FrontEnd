@@ -26,7 +26,7 @@ export class NavComponent implements OnInit {
       roles: ['ROLE_ADMIN']
     }, {
       menu: 'Manage Category',
-      routerLink: '',
+      routerLink: 'category',
       roles: ['ROLE_ADMIN']
     }, {
       menu: 'Manage User',

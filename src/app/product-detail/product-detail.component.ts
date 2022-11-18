@@ -27,9 +27,11 @@ export class ProductDetailComponent implements OnInit {
     this.getProduct();
   }
 
-  deleteProduct(id : number): void{
+  deleteProduct(id : number | undefined): void{
     console.log(id);
     this.productService.deleteProduct(id).subscribe();
+    
+    window.location.assign("");
   }
 
 }

@@ -1,0 +1,19 @@
+<div class="d-flex justify-content-center text-center" >
+    <form class="p-3 mt-3" [formGroup]="addCategoryForm" (ngSubmit)="onSubmit()" style="width: 50%;">
+        <h1 class="h3 mb-5 fw-normal">Add Category</h1>
+    
+        <div class="alert alert-danger" role="alert" *ngIf="errorMessage">
+            {{errorMessage}}
+        </div>
+    
+        <div class="form-floating">
+            <input type="text" class="form-control mb-2" id="floatingInput" placeholder="name" formControlName="name">
+            <label for="floatingInput">Name</label>
+        </div>
+        <button class="w-100 btn btn-lg btn-primary" type="submit" [disabled]="!addCategoryForm.valid">Submit</button>
+    </form>
+    <!-- <div class="alert alert-success" *ngIf="addCategoryForm">
+      Welcome {{username_}} as {{ role }}.
+    </div> -->
+  </div>
+  

@@ -1,0 +1,14 @@
+<div class="d-flex justify-content-center text-center" >
+    <form class="p-3 mt-3" [formGroup]="editCategoryForm" (ngSubmit)="onSubmit()" style="width: 50%;">
+        <h1 class="h3 mb-5 fw-normal">Edit Product</h1>
+    
+    
+        <div class="form-floating">
+            <input type="text" class="form-control mb-2" id="floatingInput" placeholder="name" formControlName="name" value="{{category?.name}}">
+            <label for="floatingInput">Name</label>
+        </div>
+        
+        <button class="w-100 btn btn-lg btn-primary" type="submit" [disabled]="!editCategoryForm.valid">Submit</button>
+    </form>
+  </div>
+  

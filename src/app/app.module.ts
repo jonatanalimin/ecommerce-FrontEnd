@@ -14,6 +14,10 @@ import { ProductDetailComponent } from './product-detail/product-detail.componen
 import { UserManagementComponent } from './user-management/user-management.component';
 import { BiodataComponent } from './biodata/biodata.component';
 import { SpinnerComponent } from './spinner/spinner.component';
+import { EditProductComponent } from './edit-product/edit-product.component';
+import { AllCategoryComponent } from './all-category/all-category.component';
+import { AddCategoryComponent } from './add-category/add-category.component';
+import { EditCategoryComponent } from './edit-category/edit-category.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +32,10 @@ import { SpinnerComponent } from './spinner/spinner.component';
     UserManagementComponent,
     BiodataComponent,
     SpinnerComponent,
+    EditProductComponent,
+    AllCategoryComponent,
+    AddCategoryComponent,
+    EditCategoryComponent
   ],
   imports: [
     BrowserModule,

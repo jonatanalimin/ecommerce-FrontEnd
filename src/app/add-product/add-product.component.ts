@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { Category } from '../model/product';
+import { CategoryService } from '../service/category.service';
 import { ProductService } from '../service/product.service';
 
 @Component({
@@ -10,6 +12,10 @@ import { ProductService } from '../service/product.service';
 export class AddProductComponent implements OnInit {
   
   role: string = '';
+  image: string = '';
+  
+  myReader:FileReader = new FileReader();
+  listCategory: Category[] = [];
   errorMessage: string ='';
   addProductForm = this.fb.group({
     name: ['', Validators.required],
@@ -20,14 +26,21 @@ export class AddProductComponent implements OnInit {
   });
   constructor(
     private productService: ProductService,
+    private categoryService: CategoryService,
     private fb: FormBuilder,
     ) { }
 
   ngOnInit(): void {
+    this.getCategory();
   }
 
   onSubmit(): void{
     this.submit();
+  }
+
+  getCategory(): void {
+    this.categoryService.getAllCategory()
+    .subscribe(observable => this.listCategory = observable);
   }
 
   submit(): void{
@@ -37,29 +50,40 @@ export class AddProductComponent implements OnInit {
     let price_val: string;
     let description_val: string;
     let category_val: string;
-    console.log("start");
-    // if(typeof(this.addProductForm.value.username)==='string' && typeof(this.addProductForm.value.password)==='string'){
-      // name_val = this.addProductForm.value.name;
-      // image_val = this.addProductForm.value.image;
-      // price_val = this.addProductForm.value.price;
-      // description_val = this.addProductForm.value.description;
-      // category_val = this.addProductForm.value.category;
+    if(typeof(this.addProductForm.value.name)==='string'
+      && this.myReader.result?.toString()
+      && typeof(this.addProductForm.value.price)==='string'
+      && typeof(this.addProductForm.value.description)==='string'
+      && typeof(this.addProductForm.value.category)==='string'){
+      name_val = this.addProductForm.value.name;
+      image_val = this.myReader.result?.toString();
+      price_val = this.addProductForm.value.price;
+      description_val = this.addProductForm.value.description;
+      category_val = this.addProductForm.value.category;
       
-      this.productService.addProduct('asd', 'asd', 10000, 'asd', 1)
+      this.productService.addProduct(name_val, image_val, price_val, description_val, category_val)
       .subscribe({
         next: (response) => {
-          console.log(response);
-          
-          console.log("start");
-          window.location.reload();
+          window.location.assign("");
         },
         error:(err) => {
-          console.log("error");
-          console.log(err);
           this.errorMessage = err.error.errorMessage;
           this.addProductForm.reset();
         }
       })
-    // } 
+    } 
+  }
+
+  changeListener($event: any) : void {
+    this.readThis($event.target);
+  }
+  
+  readThis(inputValue: any): void {
+    var file:File = inputValue.files[0];
+  
+    this.myReader.onloadend = (e) => {
+      this.myReader.result;
+    }
+    this.myReader.readAsDataURL(file);
   }
 }

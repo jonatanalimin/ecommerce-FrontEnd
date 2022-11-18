@@ -8,8 +8,8 @@
       <p class="price">Rp. {{product?.price}}</p>
       <p class="description">{{product?.description}}</p>
       <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-        <button type="button" class="btn btn-primary btn-lg px-4 me-md-2">Wishlist</button>
-        <button type="button" (click)="deleteProduct(9)" class="btn btn-danger btn-lg px-4 me-md-2">Delete Product</button>
+        <a class="btn btn-warning btn-lg px-4 me-md-2" routerLink="/edit-product/{{product?.id}}">Edit</a>
+        <button type="button" (click)="deleteProduct(product?.id)" class="btn btn-danger btn-lg px-4 me-md-2">Delete Product</button>
       </div>
     </div>
   </div>

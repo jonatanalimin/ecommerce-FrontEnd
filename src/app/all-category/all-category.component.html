@@ -1,0 +1,12 @@
+<br>
+<a class="btn btn-success" routerLink="/add-category">Add Category</a>
+<div class="my-3 p-3 bg-body rounded shadow-sm">
+    <h6 class="border-bottom pb-2 mb-0">Category List</h6>
+    <div class="d-flex text-muted pt-3" *ngFor="let category of listCategory">
+      <p class="pb-3 mb-0 small lh-sm border-bottom">
+        <a class="btn btn-warning" routerLink="/edit-category/{{category.id}}">Edit</a>
+        {{category.name}}
+      </p>
+    </div>
+    
+  </div>
