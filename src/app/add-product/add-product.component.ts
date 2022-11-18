@@ -3,6 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Category } from '../model/product';
 import { CategoryService } from '../service/category.service';
 import { ProductService } from '../service/product.service';
+import { StorageService } from '../service/storage.service';
 
 @Component({
   selector: 'app-add-product',
@@ -25,6 +26,7 @@ export class AddProductComponent implements OnInit {
     category: ['', Validators.required],
   });
   constructor(
+    private storageService: StorageService,
     private productService: ProductService,
     private categoryService: CategoryService,
     private fb: FormBuilder,
@@ -61,7 +63,7 @@ export class AddProductComponent implements OnInit {
       description_val = this.addProductForm.value.description;
       category_val = this.addProductForm.value.category;
       
-      this.productService.addProduct(name_val, image_val, price_val, description_val, category_val)
+      this.productService.addProduct(this.storageService.getUser().auth, name_val, image_val, price_val, description_val, category_val)
       .subscribe({
         next: (response) => {
           window.location.assign("");

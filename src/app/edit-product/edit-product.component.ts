@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Category, Product } from '../model/product';
 import { CategoryService } from '../service/category.service';
 import { ProductService } from '../service/product.service';
+import { StorageService } from '../service/storage.service';
 
 @Component({
   selector: 'app-edit-product',
@@ -30,7 +31,9 @@ export class EditProductComponent implements OnInit {
     description: [''],
     category: [''],
   });
-  constructor(private productService: ProductService, private categoryService: CategoryService, private http: HttpClient, private route: ActivatedRoute, private fb: FormBuilder) { }
+  constructor(
+    private storageService: StorageService,
+    private productService: ProductService, private categoryService: CategoryService, private http: HttpClient, private route: ActivatedRoute, private fb: FormBuilder) { }
   
   getProduct(): void {
     const idParam = Number(this.route.snapshot.paramMap.get('id'));
@@ -110,7 +113,7 @@ export class EditProductComponent implements OnInit {
         category_val = this.tmpCategory;
       }
 
-      this.productService.editProduct(Number(this.route.snapshot.paramMap.get('id')), name_val, image_val, price_val, description_val, category_val)
+      this.productService.editProduct(this.storageService.getUser().auth, Number(this.route.snapshot.paramMap.get('id')), name_val, image_val, price_val, description_val, category_val)
       .subscribe({
         next: (response) => {
           window.location.assign("");

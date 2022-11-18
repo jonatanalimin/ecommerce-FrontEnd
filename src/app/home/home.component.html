@@ -14,7 +14,7 @@
         <!-- <button class="btn btn-outline-success" type="submit">Search</button> -->
     </form>
     <br>
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-md-4 g-3">
+    <div *ngIf="listProduct.length > 0; else noProduct" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-md-4 g-3">
         <div class="col" *ngFor="let product of listProduct">
             <div class="card shadow-sm">
                 <img class="image" src="{{product.image}}">
@@ -27,4 +27,7 @@
             </div>
         </div>
     </div>
+    <ng-template #noProduct class="container">
+        <h4 class="text-muted text-center">There is no product!</h4>
+    </ng-template>
 </div>

@@ -45,28 +45,35 @@ export class ProductService {
     return this.http.get<Product>(`${this.url}/getDetail/${id}`);
   }
 
-  deleteProduct(id: number | undefined){
+  deleteProduct(auth:string, id: number | undefined){
     // const urlByID = `http://localhost:8080/api-product/delete/${id}`
     // return this.http.delete<Product>(`${this.url}/delete/${id}`);
     const httpOptions = {
-      headers: new HttpHeaders({'Content-Type': 'application/json'}),
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': auth}),
       observable: "response"
     }
     return this.http.delete(`${this.url}/delete/${id}`, httpOptions);
     
   }
 
-  addProduct(name:string, image:string, price:string, description:string, category:string): Observable<Product>{
+  addProduct(auth:string, name:string, image:string, price:string, description:string, category:string): Observable<Product>{
     const httpOptions = {
-      headers: new HttpHeaders({'Content-type': 'application/json'}),
+      headers: new HttpHeaders({
+        'Content-type': 'application/json',
+        'Authorization': auth
+      }),
       observable: "response"
     }
     return this.http.post<Product>(`${this.url}/add`, {'name': name, 'image': image, 'price': price, 'description': description, 'category': category}, httpOptions)
   }
 
-  editProduct(id: number, name:string, image:string, price:string, description:string, category:string): Observable<Product>{
+  editProduct(auth:string, id: number, name:string, image:string, price:string, description:string, category:string): Observable<Product>{
     const httpOptions = {
-      headers: new HttpHeaders({'Content-type': 'application/json'}),
+      headers: new HttpHeaders({
+        'Content-type': 'application/json',
+        'Authorization': auth}),
       observable: "response"
     }
     return this.http.put<Product>(`${this.url}/update/${id}`, {'name': name, 'image': image, 'price': price, 'description': description, 'category': category}, httpOptions)

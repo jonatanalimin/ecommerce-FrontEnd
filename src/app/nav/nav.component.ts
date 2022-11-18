@@ -72,6 +72,10 @@ export class NavComponent implements OnInit {
     }
   }
 
+  toBiodata(): void{
+    this.router.navigate(['biodata']);
+  }
+
   logout(): void {
     // this.http.post('', {}, {withCredentials: true})
     // .subscribe(() => this.authenticated = false);

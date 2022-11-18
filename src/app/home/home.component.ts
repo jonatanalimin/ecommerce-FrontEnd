@@ -6,6 +6,7 @@ import { Emitters } from '../emitter/emitter';
 import { Category, Product } from '../model/product';
 import { CategoryService } from '../service/category.service';
 import { ProductService } from '../service/product.service';
+import { SpinnerService } from '../service/spinner.service';
 
 @Component({
   selector: 'app-home',
@@ -23,18 +24,30 @@ export class HomeComponent implements OnInit {
   searchByCategoryForm = this.fb.group({
     category: ['', Validators.required]
   });
-  constructor(private productService: ProductService, private categoryService: CategoryService, private http: HttpClient, private fb: FormBuilder,) { }
+  constructor(
+    private productService: ProductService,
+    private categoryService: CategoryService,
+    private spinnerService: SpinnerService,
+    private fb: FormBuilder) { }
 
   ngOnInit(): void {
     this.listProduct = [];
-    
+    this.spinnerService.requestStarted();
     this.getProducts();
     this.getCategory();
   }
 
   getProducts(): void {
     this.productService.getProducts()
-    .subscribe(observable => this.listProduct = observable);
+    .subscribe({
+      next: (observable) => {
+        this.listProduct = observable;
+        this.spinnerService.requestEnded();
+      },
+      error: (err) => {
+        this.spinnerService.resetSpinner();
+      }
+    });
   }
   
   getCategory(): void {

@@ -11,10 +11,6 @@
             true}">{{nav.menu}}</a>
         </li>
       </ul>
-      <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
       <button *ngIf="!isLoggedIn" style="margin-left:10px;" class="btn btn-outline-danger" type="submit">
         <a class="nav-link" [routerLink]="['/login']" routerLinkActive="my-right-active-link" [routerLinkActiveOptions]="{exact:
           true}">Log In</a>
@@ -25,6 +21,15 @@
       <button *ngIf="!isLoggedIn" style="margin-left:10px;" class="btn btn-outline-danger" type="submit">
         <a class="nav-link" [routerLink]="['/register']" routerLinkActive="my-right-active-link" [routerLinkActiveOptions]="{exact:
           true}">Register</a>
+      </button>
+      <button *ngIf="isLoggedIn" style="margin-left:10px;" class="btn btn-outline-primary" (click)="toBiodata()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="blue" class="bi bi-person-circle" viewBox="0 0 16 16">
+          <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+          <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+        </svg>
+        <h5 class="text-white">
+            {{username | titlecase}}
+        </h5>
       </button>
     </div>
   </div>
