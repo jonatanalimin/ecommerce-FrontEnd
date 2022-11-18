@@ -20,4 +20,11 @@ export class AllCategoryComponent implements OnInit {
     this.categoryService.getAllCategory()
     .subscribe(observable => this.listCategory = observable);
   }
+
+  deleteCategory(id : number | undefined): void{
+    console.log(id);
+    this.categoryService.deleteCategory(id).subscribe();
+    
+    window.location.assign("");
+  }
 }

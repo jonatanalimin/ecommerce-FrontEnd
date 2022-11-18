@@ -38,4 +38,13 @@ export class CategoryService {
     }
     return this.http.put<Product>(`${this.categoryUrl}/update/${id}`, {'name': name}, httpOptions)
   }
+  
+  deleteCategory(id: number | undefined){
+    const httpOptions = {
+      headers: new HttpHeaders({'Content-Type': 'application/json'}),
+      observable: "response"
+    }
+    return this.http.delete(`${this.categoryUrl}/delete/${id}`, httpOptions);
+    
+  }
 }

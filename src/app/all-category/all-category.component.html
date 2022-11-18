@@ -5,6 +5,7 @@
     <div class="d-flex text-muted pt-3" *ngFor="let category of listCategory">
       <p class="pb-3 mb-0 small lh-sm border-bottom">
         <a class="btn btn-warning" routerLink="/edit-category/{{category.id}}">Edit</a>
+        <button type="button" (click)="deleteCategory(category.id)" class="btn btn-danger">Delete</button>
         {{category.name}}
       </p>
     </div>
