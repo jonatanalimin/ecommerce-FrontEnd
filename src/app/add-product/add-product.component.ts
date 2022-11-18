@@ -23,7 +23,7 @@ export class AddProductComponent implements OnInit {
     image: ['', Validators.required],
     price: ['', Validators.required],
     description: ['', Validators.required],
-    category: ['', Validators.required],
+    category: [0, Validators.required],
   });
   constructor(
     private storageService: StorageService,
@@ -63,7 +63,7 @@ export class AddProductComponent implements OnInit {
       description_val = this.addProductForm.value.description;
       category_val = this.addProductForm.value.category;
       
-      this.productService.addProduct(this.storageService.getUser().auth, name_val, image_val, price_val, description_val, category_val)
+      this.productService.addProduct(this.storageService.getUser().auth, name_val, image_val, price_val, description_val, Number(category_val))
       .subscribe({
         next: (response) => {
           window.location.assign("");

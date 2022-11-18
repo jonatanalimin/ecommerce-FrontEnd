@@ -4,6 +4,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Category } from '../model/product';
 import { CategoryService } from '../service/category.service';
+import { StorageService } from '../service/storage.service';
 
 @Component({
   selector: 'app-edit-category',
@@ -17,7 +18,9 @@ export class EditCategoryComponent implements OnInit {
   editCategoryForm = this.fb.group({
     name: ['', Validators.required]
   });
-  constructor(private categoryService: CategoryService, private http: HttpClient, private route: ActivatedRoute, private fb: FormBuilder) { }
+  constructor(
+    private storageService: StorageService,
+    private categoryService: CategoryService, private http: HttpClient, private route: ActivatedRoute, private fb: FormBuilder) { }
 
   getCategory(): void {
     const idParam = Number(this.route.snapshot.paramMap.get('id'));
@@ -44,8 +47,8 @@ export class EditCategoryComponent implements OnInit {
     let category_val: string;
     if(typeof(this.editCategoryForm.value.name)==='string'){
       name_val = this.editCategoryForm.value.name;
-      
-      this.categoryService.editCategory(Number(this.route.snapshot.paramMap.get('id')), name_val)
+      console.log(name_val);
+      this.categoryService.editCategory(this.storageService.getUser().auth, Number(this.route.snapshot.paramMap.get('id')), name_val)
       .subscribe({
         next: (response) => {
           window.location.assign("category");

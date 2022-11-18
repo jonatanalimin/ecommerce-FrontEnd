@@ -23,25 +23,34 @@ export class CategoryService {
     return this.http.get<Product>(`${this.categoryUrl}/getDetail/${id}`);
   }
  
-  addCategory(name:string): Observable<Product>{
+  addCategory(auth: string, name:string): Observable<Product>{
     const httpOptions = {
-      headers: new HttpHeaders({'Content-type': 'application/json'}),
+      headers: new HttpHeaders({
+        'Content-type': 'application/json',
+        'Authorization': auth
+      }),
       observable: "response"
     }
     return this.http.post<Product>(`${this.categoryUrl}/add`, {'name': name}, httpOptions)
   }
   
-  editCategory(id: number, name:string): Observable<Product>{
+  editCategory(auth: string, id: number, name:string): Observable<Product>{
     const httpOptions = {
-      headers: new HttpHeaders({'Content-type': 'application/json'}),
+      headers: new HttpHeaders({
+        'Content-type': 'application/json',
+        'Authorization': auth
+      }),
       observable: "response"
     }
-    return this.http.put<Product>(`${this.categoryUrl}/update/${id}`, {'name': name}, httpOptions)
+    return this.http.put<Product>(`${this.categoryUrl}/update/${id}`, {'id':0, 'name': name}, httpOptions)
   }
   
-  deleteCategory(id: number | undefined){
+  deleteCategory(auth: string, id: number | undefined){
     const httpOptions = {
-      headers: new HttpHeaders({'Content-Type': 'application/json'}),
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': auth
+      }),
       observable: "response"
     }
     return this.http.delete(`${this.categoryUrl}/delete/${id}`, httpOptions);

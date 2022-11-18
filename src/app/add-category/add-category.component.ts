@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { CategoryService } from '../service/category.service';
+import { StorageService } from '../service/storage.service';
 
 @Component({
   selector: 'app-add-category',
@@ -13,6 +14,7 @@ export class AddCategoryComponent implements OnInit {
     name: ['', Validators.required]
   });
   constructor(
+    private storageService: StorageService,
     private categoryService: CategoryService,
     private fb: FormBuilder,
     ) { }
@@ -30,7 +32,7 @@ export class AddCategoryComponent implements OnInit {
     if(typeof(this.addCategoryForm.value.name)==='string'){
       name_val = this.addCategoryForm.value.name;
 
-      this.categoryService.addCategory(name_val)
+      this.categoryService.addCategory(this.storageService.getUser().auth, name_val)
       .subscribe({
         next: (response) => {
           window.location.assign("category");

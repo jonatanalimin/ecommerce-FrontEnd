@@ -58,7 +58,7 @@ export class ProductService {
     
   }
 
-  addProduct(auth:string, name:string, image:string, price:string, description:string, category:string): Observable<Product>{
+  addProduct(auth:string, name:string, image:string, price:string, description:string, category:number): Observable<Product>{
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-type': 'application/json',
@@ -66,17 +66,17 @@ export class ProductService {
       }),
       observable: "response"
     }
-    return this.http.post<Product>(`${this.url}/add`, {'name': name, 'image': image, 'price': price, 'description': description, 'category': category}, httpOptions)
+    return this.http.post<Product>(`${this.url}/add`, {'name': name, 'image': image, 'price': price, 'description': description, 'categoryModel': {'id':category, 'name':''}}, httpOptions)
   }
 
-  editProduct(auth:string, id: number, name:string, image:string, price:string, description:string, category:string): Observable<Product>{
+  editProduct(auth:string, id: number, name:string, image:string, price:string, description:string, category:number): Observable<Product>{
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-type': 'application/json',
         'Authorization': auth}),
       observable: "response"
     }
-    return this.http.put<Product>(`${this.url}/update/${id}`, {'name': name, 'image': image, 'price': price, 'description': description, 'category': category}, httpOptions)
+    return this.http.put<Product>(`${this.url}/update/${id}`, {'name': name, 'image': image, 'price': price, 'description': description, 'categoryModel': {'id':category, 'name':''}}, httpOptions)
   }
   
   

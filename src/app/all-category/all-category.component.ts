@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Category } from '../model/product';
 import { CategoryService } from '../service/category.service';
+import { StorageService } from '../service/storage.service';
 
 @Component({
   selector: 'app-all-category',
@@ -10,7 +11,9 @@ import { CategoryService } from '../service/category.service';
 export class AllCategoryComponent implements OnInit {
 
   listCategory: Category[] = [];
-  constructor(private categoryService: CategoryService,) { }
+  constructor(
+    private storageService: StorageService,
+    private categoryService: CategoryService,) { }
 
   ngOnInit(): void {
     this.getCategory();
@@ -23,7 +26,7 @@ export class AllCategoryComponent implements OnInit {
 
   deleteCategory(id : number | undefined): void{
     console.log(id);
-    this.categoryService.deleteCategory(id).subscribe();
+    this.categoryService.deleteCategory(this.storageService.getUser().auth, id).subscribe();
     
     window.location.assign("");
   }

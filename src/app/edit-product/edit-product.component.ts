@@ -21,7 +21,10 @@ export class EditProductComponent implements OnInit {
   tmpImg: string ='';
   tmpPrice: string ='';
   tmpDescription: string ='';
-  tmpCategory: string = '';
+  tmpCategory: Category = {
+    'id': 0,
+    'name': ''
+  };
   selectedQuantity: number | undefined;
   myReader:FileReader = new FileReader();
   editProductForm = this.fb.group({
@@ -40,13 +43,14 @@ export class EditProductComponent implements OnInit {
     this.productService.getProduct(idParam)
     .subscribe(obs => {
       this.product = obs;
-      this.selectedQuantity = obs.category;
-      // console.log(this.product);
+      console.log(this.product);
+      this.selectedQuantity = obs.categoryModel.id;
+      console.log(this.selectedQuantity);
       this.tmpName = this.product.name;
       this.tmpImg = this.product.image;
       this.tmpPrice = this.product.price;
       this.tmpDescription = this.product.description;
-      this.tmpCategory = this.product.category.toString();
+      this.tmpCategory = this.product.categoryModel;
     });
   }
   
@@ -84,6 +88,7 @@ export class EditProductComponent implements OnInit {
     let price_val: string;
     let description_val: string;
     let category_val: string;
+    console.log(this.editProductForm);
     if(typeof(this.editProductForm.value.name)==='string'
       && typeof(this.editProductForm.value.price)==='string'
       && typeof(this.editProductForm.value.description)==='string'
@@ -110,10 +115,10 @@ export class EditProductComponent implements OnInit {
         description_val = this.tmpDescription;
       }
       if(!category_val){
-        category_val = this.tmpCategory;
+        category_val = this.tmpCategory.id.toString();
       }
 
-      this.productService.editProduct(this.storageService.getUser().auth, Number(this.route.snapshot.paramMap.get('id')), name_val, image_val, price_val, description_val, category_val)
+      this.productService.editProduct(this.storageService.getUser().auth, Number(this.route.snapshot.paramMap.get('id')), name_val, image_val, price_val, description_val, Number(category_val))
       .subscribe({
         next: (response) => {
           window.location.assign("");
