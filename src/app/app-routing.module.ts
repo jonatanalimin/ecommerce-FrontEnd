@@ -21,13 +21,13 @@ const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
   {path: 'add-product', component: AddProductComponent, canActivate: [AuthGuardService]},
-  {path: 'edit-product/:id', component: EditProductComponent},
+  {path: 'edit-product/:id', component: EditProductComponent, canActivate: [AuthGuardService]},
   {path: 'product-details/:id', component: ProductDetailComponent},
   {path: 'user-management', component: UserManagementComponent, canActivate: [AuthGuardService]},
   {path: 'biodata', component: BiodataComponent, canActivate: [AuthGuardAllUserService]},
-  {path: 'category', component: AllCategoryComponent},
-  {path: 'add-category', component: AddCategoryComponent},
-  {path: 'edit-category/:id', component: EditCategoryComponent}
+  {path: 'category', component: AllCategoryComponent, canActivate: [AuthGuardService]},
+  {path: 'add-category', component: AddCategoryComponent, canActivate: [AuthGuardService]},
+  {path: 'edit-category/:id', component: EditCategoryComponent, canActivate: [AuthGuardService]}
   // {path: '', redirectTo: '/dashboard', pathMatch: 'full'},
   // {path: 'dashboard', component: DashboardComponent},
   // {path: 'error', component: ErrorpageComponent},
