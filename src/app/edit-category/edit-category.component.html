@@ -4,11 +4,29 @@
     
     
         <div class="form-floating">
-            <input type="text" class="form-control mb-2" id="floatingInput" placeholder="name" formControlName="name" value="{{category?.name}}">
+            <input type="text" class="form-control mb-2" id="floatingInput" placeholder="name" formControlName="name">
             <label for="floatingInput">Name</label>
         </div>
         
-        <button class="w-100 btn btn-lg btn-primary" type="submit" [disabled]="!editCategoryForm.valid">Submit</button>
+        <button *ngIf="!processing;else spin" class="w-100 btn btn-lg btn-primary" type="submit" [disabled]="!editCategoryForm.valid">Submit</button>
+        <ng-template #spin>
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </ng-template>
     </form>
   </div>
-  
+  <ng-template #content let-c="close" let-d="dismiss">    
+    <div class="modal-header">    
+        <h4 class="modal-title" id="modal-basic-title">{{title}}</h4>    
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">    
+            <span aria-hidden="true">×</span>    
+        </button>    
+    </div>    
+    <div class="modal-body">    
+        <p>{{body}}</p>  
+    </div>    
+    <div class="modal-footer"> 
+        <button type="button" class="btn btn-outline-dark" (click)="c('ok')">Ok</button>    
+    </div>    
+  </ng-template>

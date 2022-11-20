@@ -1,18 +1,21 @@
-<div class="container col-xxl-8 px-4 py-5">
-  <div class="row flex-lg-row align-items-center g-5 py-5">
+<div class="container col-xxl-8 px-4 pt-2">
+  <div *ngIf="product !== null && product !== undefined; else notFound" class="row flex-lg-row align-items-center g-5 py-5">
     <div class="col-10 col-sm-8 col-lg-6">
-      <img src="{{product?.image}}">
+      <img src="{{product.image}}" height="400px" width="400px">
     </div>
     <div class="col-lg-6">
-      <h1 class="display-5 fw-bold lh-1 mb-3 title">{{product?.name}}</h1>
-      <p class="price">Rp. {{product?.price}}</p>
-      <p class="description">{{product?.description}}</p>
+      <h1 class="display-5 fw-bold lh-1 mb-3 title">{{product.name | titlecase}}</h1>
+      <p class="price">{{product.price | currency: 'IDR ': 'code' : '1.0-0'}}</p>
+      <p class="description">{{product.description}}</p>
       <div *ngIf="isAdmin" class="d-grid gap-2 d-md-flex justify-content-md-start">
-        <a class="btn btn-warning btn-lg px-4 me-md-2" routerLink="/edit-product/{{product?.id}}">Edit</a>
+        <a class="btn btn-warning btn-lg px-4 me-md-2" routerLink="/edit-product/{{product.id}}">Edit</a>
         <button type="button" (click)="showDelete(content)" class="btn btn-danger btn-lg px-4 me-md-2">Delete Product</button>
       </div>
     </div>
   </div>
+  <ng-template #notFound class="container">
+    <h4 class="text-muted text-center">Product not found!</h4>
+  </ng-template>
 </div>
 
 <ng-template #content let-c="close" let-d="dismiss">    

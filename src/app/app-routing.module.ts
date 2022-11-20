@@ -27,10 +27,8 @@ const routes: Routes = [
   {path: 'biodata', component: BiodataComponent, canActivate: [AuthGuardAllUserService]},
   {path: 'category', component: AllCategoryComponent, canActivate: [AuthGuardService]},
   {path: 'add-category', component: AddCategoryComponent, canActivate: [AuthGuardService]},
-  {path: 'edit-category/:id', component: EditCategoryComponent, canActivate: [AuthGuardService]}
-  // {path: '', redirectTo: '/dashboard', pathMatch: 'full'},
-  // {path: 'dashboard', component: DashboardComponent},
-  // {path: 'error', component: ErrorpageComponent},
+  {path: 'edit-category/:id', component: EditCategoryComponent, canActivate: [AuthGuardService]},
+  { path: '**', redirectTo: '' }
 ]
 @NgModule({
   imports: [

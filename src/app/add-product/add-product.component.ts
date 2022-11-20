@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Category } from '../model/product';
 import { CategoryService } from '../service/category.service';
 import { ProductService } from '../service/product.service';
@@ -11,6 +13,10 @@ import { StorageService } from '../service/storage.service';
   styleUrls: ['./add-product.component.css']
 })
 export class AddProductComponent implements OnInit {
+  title='';
+  body='';
+  processing = false;
+  @ViewChild('contentInfo') myModal : ElementRef | undefined;
   
   role: string = '';
   image: string = '';
@@ -23,9 +29,11 @@ export class AddProductComponent implements OnInit {
     image: ['', Validators.required],
     price: ['', Validators.required],
     description: ['', Validators.required],
-    category: [0, Validators.required],
+    category: ['', Validators.required],
   });
   constructor(
+    private router: Router,
+    private modalService: NgbModal,
     private storageService: StorageService,
     private productService: ProductService,
     private categoryService: CategoryService,
@@ -57,6 +65,9 @@ export class AddProductComponent implements OnInit {
       && typeof(this.addProductForm.value.price)==='string'
       && typeof(this.addProductForm.value.description)==='string'
       && typeof(this.addProductForm.value.category)==='string'){
+      
+      this.processing = true;
+      this.addProductForm.disable();
       name_val = this.addProductForm.value.name;
       image_val = this.myReader.result?.toString();
       price_val = this.addProductForm.value.price;
@@ -65,12 +76,27 @@ export class AddProductComponent implements OnInit {
       
       this.productService.addProduct(this.storageService.getUser().auth, name_val, image_val, price_val, description_val, Number(category_val))
       .subscribe({
-        next: (response) => {
-          window.location.assign("");
+        next: () => {
+          this.processing = false;
+          this.title = 'Success Add Product';
+          this.body = `Success add product: ${name_val}`;
+          this.modalService.open(this.myModal, { ariaLabelledBy: 'modal-basic-title' }).result.then(
+            () => {
+              this.router.navigate([""]);
+            },
+            () => {
+              this.router.navigate([""]);
+            }
+          );
         },
         error:(err) => {
-          this.errorMessage = err.error.errorMessage;
-          this.addProductForm.reset();
+          this.title = 'Failed Add Category';
+          this.body = err.message;
+          this.processing = false;
+          this.addProductForm.enable();
+          this.modalService.open(this.myModal, { ariaLabelledBy: 'modal-basic-title' }).result.then(
+            () => {}, () => {}
+          );
         }
       })
     } 

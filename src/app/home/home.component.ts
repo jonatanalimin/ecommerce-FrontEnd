@@ -15,12 +15,10 @@ import { SpinnerService } from '../service/spinner.service';
 })
 export class HomeComponent implements OnInit {
   message= '';
-
+  searchText: string = '';
   listProduct: Product[] = [];
+  backupListProduct: Product[] = [];
   listCategory: Category[] = [];
-  searchForm = this.fb.group({
-    search: ['', Validators.required]
-  });
   searchByCategoryForm = this.fb.group({
     category: ['', Validators.required]
   });
@@ -42,6 +40,7 @@ export class HomeComponent implements OnInit {
     .subscribe({
       next: (observable) => {
         this.listProduct = observable;
+        this.backupListProduct= observable;
         this.spinnerService.requestEnded();
       },
       error: (err) => {
@@ -55,21 +54,32 @@ export class HomeComponent implements OnInit {
     .subscribe(observable => this.listCategory = observable);
   }
   
-  onSearch(): void{
-    if(this.searchForm.value.search){
-      this.productService.getProductsByName(this.searchForm.value.search)
-      .subscribe(observable => this.listProduct = observable);
-    }
-    else{
-      this.getProducts();
+  onSearch(newText: string): void{
+    if(newText === ''){
+      this.listProduct = this.backupListProduct;
+    }else{
+      this.listProduct = [];
+      this.backupListProduct.forEach(element => {
+        if(element.name.toLowerCase().includes(newText.toLowerCase())){
+          this.listProduct.push(element);
+        }
+      });
     }
   }
 
+  resetSearch():void{
+    this.searchText = "";
+    this.listProduct = this.backupListProduct;
+  }
+
   onSearchByCategory(): void{
-    console.log("change");
+    this.searchText = "";
     if(this.searchByCategoryForm.value.category){
       this.productService.getProductsByCategory(this.searchByCategoryForm.value.category)
-      .subscribe(observable => this.listProduct = observable);
+      .subscribe(observable => {
+        this.listProduct = observable;
+        this.backupListProduct = observable;
+      });
     }
     else{
       this.getProducts();

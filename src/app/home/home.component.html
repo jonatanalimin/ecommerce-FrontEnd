@@ -1,14 +1,14 @@
 <div class="container">
     <br>
-    <form class="d-flex" role="search" [formGroup]="searchForm" (ngSubmit)="onSearch()">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" formControlName="search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
-    </form>
+    <div class="input-group">
+        <input type="text" [(ngModel)]="searchText" name="searchText" (ngModelChange)="onSearch($event)" class="form-control" placeholder="Search product by name">
+        <button *ngIf="searchText !== ''" class="btn btn-danger" type="reset" id="button-addon2" (click)="resetSearch()">X</button>
+    </div>
     <br>
     <form class="categorySearch" role="search" [formGroup]="searchByCategoryForm">
         Search by Category :
         <select class="form-control" id="floatingInput" placeholder="category" formControlName="category" (change)="onSearchByCategory()">
-            <option value="">Select Category</option>
+            <option value="">All Category</option>
             <option *ngFor="let category of listCategory" value="{{category.id}}">{{category.name}}</option>
         </select>
         <!-- <button class="btn btn-outline-success" type="submit">Search</button> -->
@@ -19,9 +19,9 @@
             <div class="card shadow-sm">
                 <img class="image" src="{{product.image}}">
                 <div class="card-body">
-                    <h2 class="title">{{product.name | uppercase}}</h2>
-                    <h2 class="price">{{product.price}}</h2>
-                    <p class="card-text">{{product.description}}</p>
+                    <h4 class="title text-truncate">{{product.name | uppercase}}</h4>
+                    <h6 class="price">{{product.price | currency: 'IDR ': 'code' : '1.0-0'}}</h6>
+                    <p class="card-text text-truncate">{{product.description}}</p>
                     <p><a class="btn btn-secondary" routerLink="/product-details/{{product.id}}">View details &raquo;</a></p>
                 </div>
             </div>

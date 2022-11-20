@@ -6,6 +6,7 @@ import { ProductService } from '../service/product.service';
 import { StorageService } from '../service/storage.service';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
+import { SpinnerService } from '../service/spinner.service';
 
 @Component({
   selector: 'app-product-detail',
@@ -21,6 +22,7 @@ export class ProductDetailComponent implements OnInit {
   title:string ="";
   body:string ="";
   constructor(
+    private spinnerService: SpinnerService,
     private modalService: NgbModal,
     private storageService: StorageService,
     private productService: ProductService,
@@ -31,13 +33,17 @@ export class ProductDetailComponent implements OnInit {
   getProduct(): void {
     const idParam = Number(this.route.snapshot.paramMap.get('id'));
     this.productService.getProduct(idParam)
-    .subscribe(obs => {
-      this.product = obs;
-      console.log(this.product);
+    .subscribe({
+      next: (obs) => {
+        this.product = obs;
+        this.spinnerService.requestEnded();
+      },
+      error: (err) => this.spinnerService.resetSpinner()
     });
   }
       
   ngOnInit(): void {  
+    this.spinnerService.requestStarted();
     if(this.storageService.getUser().role === "ROLE_ADMIN"){
       this.isAdmin = true;
     }   

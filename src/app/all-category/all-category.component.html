@@ -1,13 +1,66 @@
-<br>
-<a class="btn btn-success" routerLink="/add-category">Add Category</a>
-<div class="my-3 p-3 bg-body rounded shadow-sm">
-    <h6 class="border-bottom pb-2 mb-0">Category List</h6>
-    <div class="d-flex text-muted pt-3" *ngFor="let category of listCategory">
-      <p class="pb-3 mb-0 small lh-sm border-bottom">
-        <a class="btn btn-warning" routerLink="/edit-category/{{category.id}}">Edit</a>
-        <button type="button" (click)="deleteCategory(category.id)" class="btn btn-danger">Delete</button>
-        {{category.name}}
-      </p>
-    </div>
-    
+<div class="mt-lg-3 mb-lg-5 mx-lg-5">
+  <h4 class="mb-5 text-center">Category List</h4>
+  <div class="my-3 d-flex justify-content-center">
+    <a class="btn btn-success" routerLink="/add-category">Add Category</a>
   </div>
+  <table *ngIf="listCategory.length > 0;else noCategory" class="table table-bordered table-striped mx-auto" style="width: 40%;">
+    <thead>
+        <tr class="text-center">
+          <th scope="col">Name</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let category of listCategory" class="text-center">
+          <td class="align-middle">{{category.name | titlecase}}</td>
+          <td class="align-middle">
+            <button type="button" class="btn" routerLink="/edit-category/{{category.id}}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="blue" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                </svg>
+            </button>
+            <button type="button" class="btn"  (click)="deleteCategory(content, category)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="red" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
+                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
+                </svg>
+            </button>
+        </td>
+        </tr>
+      </tbody>
+    </table>  
+    <ng-template #noCategory class="container">
+      <h4 class="text-muted text-center mt-lg-5">Product not found!</h4>
+  </ng-template>
+</div>
+
+<ng-template #content let-c="close" let-d="dismiss">    
+  <div class="modal-header">    
+      <h4 class="modal-title" id="modal-basic-title">Confirmation</h4>    
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">    
+          <span aria-hidden="true">×</span>    
+      </button>    
+  </div>    
+  <div class="modal-body">    
+      <p>Are you sure to delete {{selectedCategory?.name}}?</p>    
+  </div>    
+  <div class="modal-footer">    
+      <button type="button" class="btn btn-outline-dark" (click)="d('Cross click')">Cancel</button>    
+      <button type="button" class="btn btn-outline-dark" (click)="c('yes')">Yes</button>    
+  </div>    
+</ng-template>
+
+<ng-template #contentDel let-c="close" let-d="dismiss">    
+  <div class="modal-header">    
+      <h4 class="modal-title" id="modal-basic-title">{{title}}</h4>    
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">    
+          <span aria-hidden="true">×</span>    
+      </button>    
+  </div>    
+  <div class="modal-body">    
+      <p>{{body}}</p>  
+  </div>    
+  <div class="modal-footer"> 
+      <button type="button" class="btn btn-outline-dark" (click)="c('ok')">Ok</button>    
+  </div>    
+</ng-template>

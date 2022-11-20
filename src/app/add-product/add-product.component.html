@@ -2,10 +2,6 @@
     <form class="p-3 mt-3" [formGroup]="addProductForm" (ngSubmit)="onSubmit()" style="width: 50%;">
         <h1 class="h3 mb-5 fw-normal">Add Product</h1>
     
-        <div class="alert alert-danger" role="alert" *ngIf="errorMessage">
-            {{errorMessage}}
-        </div>
-    
         <div class="form-floating">
             <input type="text" class="form-control mb-2" id="floatingInput" placeholder="name" formControlName="name">
             <label for="floatingInput">Name</label>
@@ -14,25 +10,44 @@
             <input type="text" class="form-control mb-2" id="floatingInput" placeholder="price" formControlName="price">
             <label for="floatingInput">Price</label>
         </div>
-        <div class="form-floating">
-            <input type="file" accept="image/*" (change)="changeListener($event)" class="form-control mb-2" id="floatingInput" placeholder="image" formControlName="image">
-            <label for="floatingInput">Image</label>
+        <div class="input-group mb-2">
+            <label class="input-group-text" for="inputGroupFile01">Add Image</label>
+            <input type="file" accept="image/*" (change)="changeListener($event)" class="form-control" id="inputGroupFile01" placeholder="image" formControlName="image">
         </div>
         <div class="form-floating">
             <input type="text" class="form-control mb-2" id="floatingInput" placeholder="description" formControlName="description">
             <label for="floatingInput">Description</label>
         </div>
         <div class="form-floating">
-            <select class="form-control mb-2" id="floatingInput" placeholder="category" formControlName="category">
-                <option *ngFor="let category of listCategory" value="{{category.id}}">{{category.name}}</option>
+            <select class="form-select mb-2" id="floatingInput" placeholder="category" formControlName="category">
+                <option value='' class="text-muted">- Select -</option>
+                <option *ngFor="let category of listCategory" [value]="category.id">{{category.name}}</option>
             </select>
-            <!-- <input type="text" class="form-control mb-2" id="floatingInput" placeholder="category" formControlName="category">
-            <label for="floatingInput">Category</label> -->
+            <label for="floatingInput">Category</label>
         </div>
-        <button class="w-100 btn btn-lg btn-primary" type="submit" [disabled]="!addProductForm.valid">Submit</button>
+        <button *ngIf="!processing;else spin" class="w-100 btn btn-lg btn-primary" type="submit" [disabled]="!addProductForm.valid">Submit</button>
+        <ng-template #spin>
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </ng-template>
     </form>
     <!-- <div class="alert alert-success" *ngIf="addProductForm">
       Welcome {{username_}} as {{ role }}.
     </div> -->
   </div>
-  
+
+  <ng-template #contentInfo let-c="close" let-d="dismiss">    
+    <div class="modal-header">    
+        <h4 class="modal-title" id="modal-basic-title">{{title}}</h4>    
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">    
+            <span aria-hidden="true">×</span>    
+        </button>    
+    </div>    
+    <div class="modal-body">    
+        <p>{{body}}</p>  
+    </div>    
+    <div class="modal-footer"> 
+        <button type="button" class="btn btn-outline-dark" (click)="c('ok')">Ok</button>    
+    </div>    
+</ng-template> 
